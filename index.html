@@ -149,6 +149,13 @@
                             <p class="plan-description">Billed monthly</p>
                         </div>
                         <div id="paypal-button-monthly"></div>
+                        
+                        <!-- Direct PayPal Button Fallback -->
+                        <div class="direct-paypal-button">
+                            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8UUCNXMEQAV28" target="_blank" class="fallback-btn">
+                                <i class="fab fa-paypal"></i> Subscribe with PayPal
+                            </a>
+                        </div>
                     </div>
                     
                     <div class="pricing-plan yearly-plan" id="yearlyPlan" style="display: none;">
@@ -161,6 +168,13 @@
                             <p class="plan-description">$3.99/month, billed annually</p>
                         </div>
                         <div id="paypal-button-yearly"></div>
+                        
+                        <!-- Direct PayPal Button Fallback -->
+                        <div class="direct-paypal-button">
+                            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8UUCNXMEQAV28" target="_blank" class="fallback-btn">
+                                <i class="fab fa-paypal"></i> Subscribe with PayPal
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
@@ -210,7 +224,7 @@
     <div class="overlay" id="overlay"></div>
     
     <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AQkQb6tMcFJvLgRe8b5JZ_krBTssM3pcbTLxA0SYI2i-hk8PxeR6Hr87oD5JV3Z1S20qLIOh1P6BYpHQ&vault=true"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AQkQb6tMcFJvLgRe8b5JZ_krBTssM3pcbTLxA0SYI2i-hk8PxeR6Hr87oD5JV3Z1S20qLIOh1P6BYpHQ&vault=true&intent=subscription&disable-funding=credit,card"></script>
     <script src="app.js"></script>
 </body>
 </html>
