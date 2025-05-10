@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Payoff Calculator Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Include jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="calculator-container">
+            <div class="header-container">
+                <h1>Credit Card Payoff Calculator <span id="proBadge" class="pro-badge" style="display: none;">PRO</span></h1>
+                <button id="upgradeBtn" class="upgrade-btn">
+                    <i class="fas fa-crown"></i> Upgrade to Pro
+                </button>
+            </div>
+            
+            <div class="trial-info" id="trialInfo">
+                Your 7-day free trial is active
+                <div class="trial-progress-container">
+                    <div class="trial-progress-bar" id="trialProgressBar" style="width: 100%;"></div>
+                </div>
+            </div>
+            
+            <div class="calculator">
+                <div class="input-group">
+                    <label for="balance">
+                        Credit Card Balance
+                        <span class="tooltip"><i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Enter your current credit card balance</span>
+                        </span>
+                    </label>
+                    <input type="number" id="balance" placeholder="e.g., 5000">
+                </div>
+                
+                <div class="input-group">
+                    <label for="apr">
+                        Annual Percentage Rate (APR)
+                        <span class="tooltip"><i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">The annual interest rate charged on your credit card</span>
+                        </span>
+                    </label>
+                    <input type="number" id="apr" placeholder="e.g., 18.99">
+                </div>
+                
+                <div class="input-group">
+                    <label for="payment">
+                        Monthly Payment
+                        <span class="tooltip"><i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">How much you plan to pay each month</span>
+                        </span>
+                    </label>
+                    <input type="number" id="payment" placeholder="e.g., 200">
+                </div>
+                
+                <button id="calculate" class="calculate-btn">
+                    <i class="fas fa-calculator"></i> Calculate Payoff
+                </button>
+            </div>
+            
+            <div class="results" id="results">
+                <div class="result-item">
+                    <h3>Time to Pay Off</h3>
+                    <p id="timeToPayoff">-</p>
+                </div>
+                <div class="result-item">
+                    <h3>Total Interest Paid</h3>
+                    <p id="totalInterest">-</p>
+                </div>
+            </div>
+            
+            <!-- Action buttons for PDF and Share -->
+            <div class="action-buttons" id="actionButtons" style="display: none;">
+                <button id="downloadPdfBtn" class="action-btn pdf-btn">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </button>
+                <button id="shareBtn" class="action-btn share-btn">
+                    <i class="fas fa-share-alt"></i> Share Results
+                </button>
+            </div>
+            
+            <div class="subscription-banner" id="subscriptionBanner">
+                <div class="banner-content">
+                    <div class="banner-text">
+                        <h3>Unlock Pro Features</h3>
+                        <p>Get unlimited calculations, PDF exports and more!</p>
+                    </div>
+                    <button id="bannerUpgradeBtn" class="banner-btn">
+                        Subscribe Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Subscription Modal -->
+    <div class="modal" id="subscriptionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Upgrade to Pro</h2>
+                <span class="close-modal" id="closeModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Upgrade to Pro to access all premium features of the Credit Card Payoff Calculator.</p>
+                
+                <div class="subscription-features">
+                    <div class="feature-item">
+                        <span class="feature-icon"><i class="fas fa-check-circle"></i></span>
+                        <span>Unlimited payoff calculations</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon"><i class="fas fa-check-circle"></i></span>
+                        <span>Export payment schedules as PDF</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon"><i class="fas fa-check-circle"></i></span>
+                        <span>Compare different payment strategies</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon"><i class="fas fa-check-circle"></i></span>
+                        <span>Share results with others</span>
+                    </div>
+                </div>
+                
+                <!-- Subscription plan toggle -->
+                <div class="pricing-toggle">
+                    <span class="pricing-period">Monthly</span>
+                    <label class="switch">
+                        <input type="checkbox" id="pricingToggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="pricing-period">Yearly <span class="save-badge">Save 20%</span></span>
+                </div>
+                
+                <!-- Pricing plans -->
+                <div class="pricing-plans">
+                    <div class="pricing-plan monthly-plan" id="monthlyPlan">
+                        <div class="plan-header">
+                            <h3>Monthly Pro</h3>
+                            <div class="plan-price">
+                                <span class="price">$4.99</span>
+                                <span class="period">/month</span>
+                            </div>
+                            <p class="plan-description">Billed monthly</p>
+                        </div>
+                        <div id="paypal-button-monthly"></div>
+                    </div>
+                    
+                    <div class="pricing-plan yearly-plan" id="yearlyPlan" style="display: none;">
+                        <div class="plan-header">
+                            <h3>Annual Pro</h3>
+                            <div class="plan-price">
+                                <span class="price">$47.88</span>
+                                <span class="period">/year</span>
+                            </div>
+                            <p class="plan-description">$3.99/month, billed annually</p>
+                        </div>
+                        <div id="paypal-button-yearly"></div>
+                    </div>
+                </div>
+                
+                <p class="modal-footer">Cancel anytime. All plans include full access to Pro features.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Share Your Results</h2>
+                <span class="close-modal" id="closeShareModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Share your credit card payoff calculation with others.</p>
+                
+                <div class="share-options">
+                    <button id="copyLinkBtn" class="share-option-btn">
+                        <i class="fas fa-copy"></i>
+                        <span>Copy Link</span>
+                    </button>
+                    <button id="emailShareBtn" class="share-option-btn">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email</span>
+                    </button>
+                    <button id="twitterShareBtn" class="share-option-btn">
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </button>
+                    <button id="facebookShareBtn" class="share-option-btn">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </button>
+                </div>
+                
+                <div class="share-link-container">
+                    <input type="text" id="shareLink" readonly>
+                    <button id="copyBtn">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay for modal -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AQkQb6tMcFJvLgRe8b5JZ_krBTssM3pcbTLxA0SYI2i-hk8PxeR6Hr87oD5JV3Z1S20qLIOh1P6BYpHQ&vault=true"></script>
+    <script src="app.js"></script>
+</body>
+</html>
